@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
@@ -6,14 +6,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 function SearchOptions({query, handleQueryUpdate}) {
-    const [dateParam, setDateParam] = useState("loanedOn");
-    const [fromDate, setFromDate] = useState(null);
-    const [toDate, setToDate] = useState(null);
-
-    useEffect(() => {
-        console.log(fromDate instanceof Date, toDate instanceof Date);
-    }, [dateParam, fromDate, toDate]);
-
     return (
     <section className="search-container">
         <div className="search">
@@ -34,9 +26,10 @@ function SearchOptions({query, handleQueryUpdate}) {
             </Form.Control>
             <section className="dates">
                 <Form.Control as="select" className="search-loaned-on dropdown" onChange={(e) => {
-                    setDateParam(e.target.value);
+                    handleQueryUpdate({ ...query, dateParam: e.target.value });
                 }}>
                     <option value="loanedOn">Loaned On</option>
+                    <option value="returnedOn">Returned On</option>
                 </Form.Control>
                 <div className="date">
                     <label htmlFor="from-date">From Date</label>
@@ -44,8 +37,10 @@ function SearchOptions({query, handleQueryUpdate}) {
                         id="from-date"
                         className="date form-control" 
                         ariaLabelledBy="From Date"
-                        selected={fromDate} 
-                        onChange={date => { setFromDate(date) }}/>
+                        selected={query.fromDate} 
+                        onChange={date => { 
+                            handleQueryUpdate({ ...query, fromDate: date })
+                         }}/>
                 </div>
                 <div className="date">
                     <label htmlFor="to-date">To Date</label>
@@ -53,8 +48,8 @@ function SearchOptions({query, handleQueryUpdate}) {
                         id="to-date" 
                         className="date form-control" 
                         ariaLabelledBy="To Date"
-                        selected={toDate} 
-                        onChange={date => { setToDate(date) } } />
+                        selected={query.toDate} 
+                        onChange={date => { handleQueryUpdate({ ...query, toDate: date }) } } />
                 </div>
             </section>
         </div>
@@ -65,8 +60,11 @@ function SearchOptions({query, handleQueryUpdate}) {
 
 SearchOptions.propTypes = {
     query: PropTypes.shape({
-        property: PropTypes.string,
-        value: PropTypes.string
+        property: PropTypes.string.isRequired,
+        value: PropTypes.string,
+        dateParam: PropTypes.string.isRequired,
+        fromDate: PropTypes.instanceOf(Date),
+        toDate: PropTypes.instanceOf(Date)
     }),
     handleQueryUpdate: PropTypes.func.isRequired
 };

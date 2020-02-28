@@ -6,18 +6,46 @@ import SearchOptions from "./containers/SearchOptions";
 function App() {
   
   const [loans, updateLoans] = useState({ fetched: false, equipmentList: [] });
-  const [currentQuery, updateCurrentQuery] = useState({property: "itemType", value: null});
+  const [query, updateQuery] = useState({ 
+    property: "itemType", 
+    value: null, 
+    dateParam: "loanedOn", 
+    fromDate: null,
+    toDate: null
+  });
   const [queryLoanList, updateQueryLoanList] = useState([]);
 
-  function filterWithQuery(arr, property, value, dateParameter=null, fromDate=null, toDate=null) {
+  function filterWithQuery(arr, property, value, dateParameter, fromDate, toDate) {
     if(!property || !value) {
+      return arr.filter(el => {
+        if(el[dateParameter]) {
+          if(fromDate && toDate) 
+            return Date.parse(el[dateParameter]) >= fromDate && Date.parse(el[dateParameter]) <= toDate; 
+          else if(fromDate) 
+            return Date.parse(el[dateParameter]) >= fromDate;
+          else if(toDate) 
+            return Date.parse(el[dateParameter]) <= toDate;
+          else
+            return true;
+        }
+        
+        return false;
+      });
+    }
+
+    let regex;
+    try {
+      regex = new RegExp(value, "i");
+    }
+    catch(e) {
       return arr;
     }
 
-    const regex = new RegExp(value, "i");
     return arr.filter( el => {
       if(el[property])
-        return el[property].match(regex);
+        return el[property].match(regex) && 
+        (fromDate && el[dateParameter] ? Date.parse(el[dateParameter]) >= fromDate : true) &&
+        (toDate && el[dateParameter] ? Date.parse(el[dateParameter]) <= toDate : true );
 
       return false;
       });
@@ -29,14 +57,13 @@ function App() {
     .then(res => res.json())
     .then(loans => {
       updateLoans({fetched: true, equipmentList: loans});
-      //updateQueryLoanList(loans);
     }); 
   }, []);
 
   // run filters when query changes
   useEffect(() => {
-    updateQueryLoanList(filterWithQuery(loans.equipmentList, currentQuery.property, currentQuery.value));
-  }, [loans, currentQuery]);
+    updateQueryLoanList(filterWithQuery(loans.equipmentList, query.property, query.value, query.dateParam, query.fromDate, query.toDate));
+  }, [loans, query]);
 
   const signedOutItems = [];
   const returnedItems = [];
@@ -86,19 +113,18 @@ function App() {
   }
   catch(e) {}
 
-  console.log("Rerender!");
-
-  if(!loans.fetched)
+  if(!loans.fetched) {
     return (
       <div style={{padding: "15px"}}>
         <strong>Loading data...</strong><br />
         The server might take a second to download and process the report
       </div>
     );
+  }
 
   return (
     <div className="main-container">
-      <SearchOptions query={currentQuery} handleQueryUpdate={updateCurrentQuery} /> 
+      <SearchOptions query={query} handleQueryUpdate={updateQuery} /> 
       <section className="table-section">
         <div className="table-container">
           <h2>Items signed out ({signedOutItems.length})</h2>
