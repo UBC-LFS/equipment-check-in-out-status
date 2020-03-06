@@ -165,8 +165,10 @@ app.get('/api/loans', (req, res) => {
     })
 })
 
+// serve static front-end content
 app.use(express.static('build'))
 
+// send all requests to /
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })

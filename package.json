@@ -1,6 +1,8 @@
 {
-  "name": "lc-loans-client",
-  "version": "0.1.0",
+  "name": "equipment-check-in-out-status",
+  "description": "Equipment status visualization app for UBC LFS LC",
+  "author": "Fabian Lozano",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "audit": "0.0.6",
@@ -25,15 +27,17 @@
     "react-scripts": "3.4.0"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "morgan": "^1.9.1",
     "standard": "^14.3.1"
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "npm run client-build & node server/index.js",
+    "dev": "concurrently \"npm run client-start\" \"node server/index.js\"",
     "client-start": "react-scripts start",
     "client-build": "react-scripts build",
     "client-eject": "react-scripts eject",
-    "test": "standard && react-scripts test"
+    "client-test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
