@@ -34,9 +34,9 @@
     "standard": "^14.3.1"
   },
   "scripts": {
-    "start": "npm run client-build && node server/index.js",
+    "start": "node server/index.js",
     "dev": "concurrently \"npm run client-start\" \"node server/index.js\"",
-    "server": "node server/index.js",
+    "production": "npm run client-build && node server/index.js",
     "client-start": "react-scripts start",
     "client-build": "react-scripts build",
     "client-eject": "react-scripts eject",
