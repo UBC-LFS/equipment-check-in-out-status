@@ -12,6 +12,9 @@ function App () {
       .then(loans => {
         updateLoans({ fetched: true, equipmentList: loans })
       })
+      .catch(err => {
+        console.log(err)
+      })
   }, [])
 
   return <LoanTables loans={loans} />

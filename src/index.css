@@ -1,5 +1,9 @@
 h2 { margin: 10px }
-td { width: 20% }
+td {
+  word-break: break-all;
+  word-break: break-word; 
+  width: 20%;
+}
 .search-container { margin: 10px }
 .search { 
   width: 100%;
@@ -22,10 +26,8 @@ td { width: 20% }
 .table-section {
   width: 100%;
   display: flex;
+  justify-content: space-between;
   padding: 10px;
 }
-.table-container { 
-  width: 45%;
-  margin-right: 2%;
-}
+.table-container { width: 48% }
 
