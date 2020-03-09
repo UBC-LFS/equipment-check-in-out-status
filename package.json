@@ -29,12 +29,14 @@
   },
   "devDependencies": {
     "concurrently": "^5.1.0",
+    "cross-env": "^7.0.2",
     "morgan": "^1.9.1",
     "standard": "^14.3.1"
   },
   "scripts": {
-    "start": "npm run client-build & node server/index.js",
+    "start": "npm run client-build && node server/index.js",
     "dev": "concurrently \"npm run client-start\" \"node server/index.js\"",
+    "server": "node server/index.js",
     "client-start": "react-scripts start",
     "client-build": "react-scripts build",
     "client-eject": "react-scripts eject",
