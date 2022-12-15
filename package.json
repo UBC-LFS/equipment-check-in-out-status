@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "dotenv": "^4.0.0",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jszip": "^3.10.1",
     "node-qualtrics-api": "file:node-qualtrics-api-2.tar",
     "parse-link-header": "^2.0.0",
